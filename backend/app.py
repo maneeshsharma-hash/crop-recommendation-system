@@ -1,13 +1,13 @@
 from fastapi import FastAPI
 import pickle
 import numpy as np
-from backend.utils.weather import get_weather
+from utils.weather import get_weather
 from typing import Optional
 
 app = FastAPI()
 
 # Load model
-with open("backend/model/crop_model.pkl", "rb") as f:
+with open("model/crop_model.pkl", "rb") as f:
     model = pickle.load(f)
 
 @app.get("/")

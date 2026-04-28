@@ -1,6 +1,6 @@
 import streamlit as st
 import requests
-
+language = st.radio("🌍 Select Language", ["English", "Hindi", "Telugu"])
 st.set_page_config(page_title="Crop Recommendation System", layout="centered")
 
 st.title("🌱 Crop Recommendation System")
@@ -60,17 +60,55 @@ if st.sidebar.button("🌾 Predict Crop"):
                 st.warning(f"🔁 Alternative Crop: {result['alternative_crop']}")
 
             # ---------------- EXPLANATION ----------------
-            if "explanation" in result:
-                st.subheader("🧠 Why this crop?")
+            # ---------------- EXPLANATION ----------------
+if "explanation" in result:
+    st.subheader("🧠 Why this crop?")
 
-                for point in result["explanation"]:
-                    st.write(f"✔ {point}")
+    explanations = result["explanation"]
 
-            # ---------------- TOP 3 ----------------
-            st.subheader("📌 Top 3 Predictions")
+    def translate(text, lang):
+        translations = {
+            "English": {
+                "High temperature suitable for warm-weather crops": "High temperature suitable for warm-weather crops",
+                "Low rainfall conditions detected": "Low rainfall conditions detected",
+                "High rainfall suitable for water-loving crops": "High rainfall suitable for water-loving crops",
+                "Optimal soil pH level for crop growth": "Optimal soil pH level for crop growth",
+                "Soil type supports balanced growth conditions": "Soil type supports balanced growth conditions"
+            },
+            "Hindi": {
+                "High temperature suitable for warm-weather crops": "उच्च तापमान गर्म मौसम की फसलों के लिए उपयुक्त है",
+                "Low rainfall conditions detected": "कम वर्षा की स्थिति पाई गई है",
+                "High rainfall suitable for water-loving crops": "अधिक वर्षा पानी पसंद करने वाली फसलों के लिए उपयुक्त है",
+                "Optimal soil pH level for crop growth": "मिट्टी का pH स्तर फसल के लिए उपयुक्त है",
+                "Soil type supports balanced growth conditions": "मिट्टी का प्रकार संतुलित वृद्धि में सहायक है"
+            },
+            "Telugu": {
+                "High temperature suitable for warm-weather crops": "అధిక ఉష్ణోగ్రత వేడి వాతావరణ పంటలకు అనుకూలం",
+                "Low rainfall conditions detected": "తక్కువ వర్షపాతం పరిస్థితులు గుర్తించబడ్డాయి",
+                "High rainfall suitable for water-loving crops": "అధిక వర్షపాతం నీటిని ఇష్టపడే పంటలకు అనుకూలం",
+                "Optimal soil pH level for crop growth": "మట్టిలో pH స్థాయి పంట పెరుగుదలకు అనుకూలం",
+                "Soil type supports balanced growth conditions": "మట్టి రకం సమతుల్య పెరుగుదలకు సహాయపడుతుంది"
+            }
+        }
 
-            for crop in result["top_predictions"]:
-                st.write(f"🌱 {crop['crop']} — {crop['confidence'] * 100:.1f}%")
+        return translations.get(lang, {}).get(text, text)
 
-    except Exception as e:
-        st.error(f"Connection Error: {e}")
+        # ---------------- EXPLANATION ----------------
+if "explanation" in result and result["explanation"]:
+
+    st.subheader("🧠 Why this crop?")
+
+    explanations = result["explanation"]
+
+    for point in explanations:
+        st.write(f"✔ {translate(point, language)}")
+
+else:
+    st.info("No explanation available")
+
+
+# ---------------- TOP 3 PREDICTIONS ----------------
+st.subheader("📌 Top 3 Predictions")
+
+for crop in result["top_predictions"]:
+    st.write(f"🌱 {crop['crop']} — {crop['confidence'] * 100:.1f}%")
