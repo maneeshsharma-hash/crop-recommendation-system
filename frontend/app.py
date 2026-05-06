@@ -70,13 +70,18 @@ if st.sidebar.button("🌾 Predict Crop"):
     }
 
     try:
-        response = requests.post("http://127.0.0.1:8000/predict", json=data)
-        result = response.json()
+        response = requests.post(
+            "https://crop-recommendation-system-1-acdt.onrender.com/predict",
+            json=data
+        )
 
-        if "error" in result:
-            st.error(result["error"])
+        
 
+        if response.status_code != 200:
+            st.error("API Error")
         else:
+            result = response.json()
+
             # ---------------- PRIMARY RESULT ----------------
             st.success(f"🌾 Recommended Crop: {result['primary_crop']}")
             st.metric("📊 Confidence", f"{result['confidence'] * 100:.2f}%")
@@ -100,7 +105,6 @@ if st.sidebar.button("🌾 Predict Crop"):
 
                 for point in result["explanation"]:
                     st.write(f"✔ {translate(point, language)}")
-
             else:
                 st.info("No explanation available")
 
@@ -112,3 +116,6 @@ if st.sidebar.button("🌾 Predict Crop"):
 
     except Exception as e:
         st.error(f"Connection Error: {e}")
+
+    
+    
