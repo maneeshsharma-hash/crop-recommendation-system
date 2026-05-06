@@ -29,28 +29,33 @@ city = st.sidebar.text_input("City")
 def translate(text, lang):
     translations = {
         "English": {
-            "High temperature suitable for warm-weather crops": "High temperature suitable for warm-weather crops",
-            "Low rainfall conditions detected": "Low rainfall conditions detected",
-            "High rainfall suitable for water-loving crops": "High rainfall suitable for water-loving crops",
-            "Optimal soil pH level for crop growth": "Optimal soil pH level for crop growth",
-            "Soil type supports balanced growth conditions": "Soil type supports balanced growth conditions"
+            "High temperature": "High temperature suitable for warm-weather crops",
+            "Low rainfall": "Low rainfall conditions detected",
+            "High rainfall": "High rainfall suitable for water-loving crops",
+            "Optimal pH": "Optimal soil pH level for crop growth",
+            "Soil type": "Soil type supports balanced growth conditions"
         },
         "Hindi": {
-            "High temperature suitable for warm-weather crops": "उच्च तापमान गर्म मौसम की फसलों के लिए उपयुक्त है",
-            "Low rainfall conditions detected": "कम वर्षा की स्थिति पाई गई है",
-            "High rainfall suitable for water-loving crops": "अधिक वर्षा पानी पसंद करने वाली फसलों के लिए उपयुक्त है",
-            "Optimal soil pH level for crop growth": "मिट्टी का pH स्तर फसल के लिए उपयुक्त है",
-            "Soil type supports balanced growth conditions": "मिट्टी का प्रकार संतुलित वृद्धि में सहायक है"
+            "High temperature": "उच्च तापमान गर्म मौसम की फसलों के लिए उपयुक्त है",
+            "Low rainfall": "कम वर्षा की स्थिति पाई गई है",
+            "High rainfall": "अधिक वर्षा पानी पसंद करने वाली फसलों के लिए उपयुक्त है",
+            "Optimal pH": "मिट्टी का pH स्तर फसल के लिए उपयुक्त है",
+            "Soil type": "मिट्टी का प्रकार संतुलित वृद्धि में सहायक है"
         },
         "Telugu": {
-            "High temperature suitable for warm-weather crops": "అధిక ఉష్ణోగ్రత వేడి వాతావరణ పంటలకు అనుకూలం",
-            "Low rainfall conditions detected": "తక్కువ వర్షపాతం పరిస్థితులు గుర్తించబడ్డాయి",
-            "High rainfall suitable for water-loving crops": "అధిక వర్షపాతం నీటిని ఇష్టపడే పంటలకు అనుకూలం",
-            "Optimal soil pH level for crop growth": "మట్టిలో pH స్థాయి పంట పెరుగుదలకు అనుకూలం",
-            "Soil type supports balanced growth conditions": "మట్టి రకం సమతుల్య పెరుగుదలకు సహాయపడుతుంది"
+            "High temperature": "అధిక ఉష్ణోగ్రత వేడి వాతావరణ పంటలకు అనుకూలం",
+            "Low rainfall": "తక్కువ వర్షపాతం పరిస్థితులు గుర్తించబడ్డాయి",
+            "High rainfall": "అధిక వర్షపాతం నీటిని ఇష్టపడే పంటలకు అనుకూలం",
+            "Optimal pH": "మట్టిలో pH స్థాయి పంట పెరుగుదలకు అనుకూలం",
+            "Soil type": "మట్టి రకం సమతుల్య పెరుగుదలకు సహాయపడుతుంది"
         }
     }
-    return translations.get(lang, {}).get(text, text)
+
+    for key in translations.get(lang, {}):
+        if key in text:
+            return translations[lang][key]
+
+    return text
 
 # ---------------- BUTTON ----------------
 if st.sidebar.button("🌾 Predict Crop"):
